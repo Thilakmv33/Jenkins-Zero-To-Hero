@@ -2,12 +2,33 @@ pipeline {
     agent any
 
     stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Check Environment') {
             steps {
                 sh 'docker --version'
                 sh 'kubectl version --client'
                 sh 'kubectl get nodes'
-                sh 'kubectl get pods'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh '''
+                    echo "Building Todo application image..."
+                    docker build -t todo-app:${BUILD_NUMBER} .
+                '''
+            }
+        }
+
+        stage('Verify Docker Image') {
+            steps {
+                sh 'docker images | grep todo-app'
             }
         }
     }
