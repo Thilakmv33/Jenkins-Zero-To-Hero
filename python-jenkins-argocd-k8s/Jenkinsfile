@@ -21,6 +21,7 @@ pipeline {
             steps {
                 sh '''
                     echo "Building Todo application image..."
+                    cd python-jenkins-argocd-k8s
                     docker build -t todo-app:${BUILD_NUMBER} .
                 '''
             }
